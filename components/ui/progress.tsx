@@ -24,7 +24,6 @@ const Progress = React.forwardRef<
       className={cn("relative h-4 w-full overflow-hidden rounded-full bg-secondary", className)}
       {...props}
       value={safeValue}
-      max={safeMax}
     >
       <ProgressPrimitive.Indicator
         className="h-full w-full flex-1 bg-orange-500 transition-all"
