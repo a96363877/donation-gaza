@@ -10,23 +10,23 @@ export default function HomePage() {
       id: "gaza-relief",
       title: "نصرة غزة",
       description: "مشروع إغاثي يهدف إلى تقديم المساعدات الإنسانية لإخواننا في قطاع غزة",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/1.jpg",
       target: 300000,
       current: 293266,
       percentComplete: 77,
     },
     {
       id: "water-wells",
-      title: "حفر آبار المياه",
-      description: "مشروع لحفر آبار المياه في المناطق التي تعاني من نقص المياه",
-      image: "/placeholder.svg?height=200&width=400",
+      title: "افطار الصائم",
+      description: "مشروع افطار الصائم في المناطق التي تعاني من نقص الطعام",
+      image: "/3.jpg",
       percentComplete: 58,
     },
     {
       id: "orphans",
       title: "كفالة الأيتام",
       description: "مشروع لكفالة الأيتام وتوفير احتياجاتهم الأساسية والتعليمية",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/2.jpg",
       percentComplete: 71,
     },
   ]
@@ -96,11 +96,10 @@ export default function HomePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {featuredProjects.map((project) => (
                 <Card key={project.id} className="overflow-hidden">
-                  <div className="relative h-48">
-                    <Image
+                  <div className="relative">
+                    <img
                       src={project.image || "/placeholder.svg"}
                       alt={project.title}
-                      fill
                       className="object-cover"
                     />
                   </div>
