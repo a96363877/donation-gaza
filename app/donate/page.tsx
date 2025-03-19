@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { addData } from "@/lib/db"
 import { useRouter } from "next/navigation"
+import Progress from "@/components/ui/progress"
 
 export default function DonationPage() {
   
@@ -73,6 +74,9 @@ export default function DonationPage() {
             <p className="text-gray-500">التكلفة</p>
             <p className=" text-orange-600">{donationStats.target.toLocaleString()} د.ك</p>
           </div>
+        </div>
+        <div className="mb-6">
+         <Progress value="77%"/>
         </div>
 
         {/* Progress Bar - Fixed to ensure value is a number */}

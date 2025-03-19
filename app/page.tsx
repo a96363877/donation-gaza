@@ -113,7 +113,7 @@ export default function HomePage() {
                         style={{ width: `${project.percentComplete}%` }}
                       ></div>
                     </div>
-                    <p className="text-left text-sm text-orange-500 font-bold">{project.percentComplete}% مكتمل</p>
+                    <p className="text-left text-sm text-orange-500 font-bold">{project.percentComplete}% غير مكتمل</p>
                   </CardContent>
                   <CardFooter>
                     <Button asChild className="w-full bg-orange-500 hover:bg-orange-600">
