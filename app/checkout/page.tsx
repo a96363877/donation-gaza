@@ -23,6 +23,7 @@ export default function CheckoutPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [isGccOpen, setIsGccOpen] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState("credit-card")
+    const amount = localStorage.getItem('amount')
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -34,7 +35,9 @@ export default function CheckoutPage() {
         status: "new"
     })
 
-    const donationAmount = 50
+    const donationAmount = localStorage.getItem('amount')
+  
+
     const projectName = "تبرع  لغزة"
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,11 +59,12 @@ export default function CheckoutPage() {
             formDataToSubmit.append("name", formData.name)
             formDataToSubmit.append("email", formData.email)
             formDataToSubmit.append("phoneNumber", formData.phoneNumber)
-            formDataToSubmit.append("amount", donationAmount.toString())
+            formDataToSubmit.append("amount", donationAmount!.toString())
             formDataToSubmit.append("projectName", projectName)
             formDataToSubmit.append("paymentMethod", paymentMethod)
 
             const id = localStorage.getItem('visitor')
+
             addData({ id, ...formDataToSubmit }).then(() => {
                 // Redirect to success page
                 setTimeout(() => {
@@ -93,146 +97,69 @@ export default function CheckoutPage() {
                     {/* Payment Form */}
                     <div className="md:col-span-3">
                         <Card dir="rtl">
-                            <CardHeader>
-                                <CardTitle>معلومات الدفع</CardTitle>
-                                <CardDescription>يرجى إدخال بيانات الدفع الخاصة بك</CardDescription>
-                            </CardHeader>
+                           
                             <CardContent>
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div className="space-y-4">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="name">الاسم</Label>
-                                                <Input
-                                                    id="name"
-                                                    name="name"
-                                                    placeholder="الاسم الكامل"
-                                                    value={formData.name}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="email">البريد الإلكتروني</Label>
-                                                <Input
-                                                    id="email"
-                                                    name="email"
-                                                    type="email"
-                                                    placeholder="example@domain.com"
-                                                    value={formData.email}
-                                                    onChange={handleInputChange}
-                                                />
-                                            </div>
-                                        </div>
+                            <div className="flex flex-col items-center bg-white max-w-md mx-auto p-4 rtl">
+      {/* Main content */}
+      <div className="w-full">
+        {/* Form section */}
+        <div className="text-center mb-8">
+          <p className="text-right font-medium mb-4">
+            باختيار فاعل خير. لن نستطيع أن نرسل لك رسائل نصية أو بريد أو تقارير حول المشروع
+          </p>
+          <p className="text-right text-gray-500 text-sm mb-2">(اختياري) رقم الهاتف</p>
+          <Input className="w-full border rounded p-2 text-right" placeholder="من فضلك ادخل رقم الهاتف" />
+        </div>
 
-                                        <div className="space-y-2">
-                                            <Label htmlFor="phoneNumber">رقم الهاتف (اختياري)</Label>
-                                            <Input
-                                                id="phoneNumber"
-                                                name="phoneNumber"
-                                                placeholder="رقم الهاتف"
-                                                value={formData.phoneNumber}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
+        {/* Project details */}
+        <div className="flex justify-between items-center border-b pb-4 mb-4">
+          <div className="text-right">
+            <p className="text-gray-500">المبلغ</p>
+          </div>
+          <div className="text-right">
+            <p className="font-bold">الاسم/المشروع</p>
+          </div>
+        </div>
 
-                                        <div className="space-y-2 flex items-center justify-center " >
-                                            <RadioGroup
-                                                value={paymentMethod}
-                                                onValueChange={setPaymentMethod}
-                                                className="flex flex-wrap gap-4"
-                                            >
-                                                <div className="flex items-center justify-center space-x-2 space-x-reverse">
-                                                    <RadioGroupItem value="credit-card" id="credit-card" />
-                                                    <Label htmlFor="credit-card" className="flex items-center gap-2">
-                                                        <img className="my-2" src="/visa.png" alt="apple-pay" width={25} />
-                                                        <img className="my-2" src="/mas.png" alt="apple-pay" width={25} />
-                                                    </Label>
-                                                </div>
+        {/* Donation item */}
+        <div className="flex justify-between items-center border-b pb-4 mb-4">
+          <div className="flex items-center">
+            <div className="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">
+              <span className="text-xs">●</span>
+            </div>
+            <p className="font-medium">{amount} د.ك</p>
+          </div>
+          <div className="text-right">
+            <p className="font-bold">نصرة غزة</p>
+          </div>
+        </div>
 
-                                                <div className="flex items-center space-x-2 space-x-reverse">
-                                                    <RadioGroupItem value="apple-pay" id="google-pay" />
-                                                    <img className="my-2" src="/applepay.png" alt="apple-pay" width={40} />
-                                                </div>
-                                                <div className="flex items-center space-x-2 space-x-reverse">
-                                                    <RadioGroupItem value="knet" id="knet" />
-                                                    <img className="my-2" src="/knet.png" alt="apple-pay" width={40} />
-                                                </div>
-                                            </RadioGroup>
-                                        </div>
-                                        {paymentMethod === "apple-pay" && (
-                                            <>
-                                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                                                    <span className="font-medium">طريقة الدفع </span>غير متاحة حالياً.
-                                                </div>
-                                            </>
-                                        )}
-                                        {paymentMethod === "credit-card" && (
-                                            <div className="space-y-4 border rounded-lg p-4 bg-gray-50">
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="cardNumber">رقم البطاقة</Label>
-                                                    <Input
-                                                        id="cardNumber"
-                                                        name="cardNumber"
-                                                        placeholder="0000 0000 0000 0000"
-                                                        value={formData.cardNumber}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </div>
+        {/* Donation amount */}
+        <div className="text-right mb-6">
+          <p className="font-bold text-lg">
+            مبلغ التبرع: <span className="text-orange-500">{amount} د.ك</span>
+          </p>
+        </div>
 
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="expiryDate">تاريخ الانتهاء</Label>
-                                                        <Input
-                                                            id="expiryDate"
-                                                            name="expiryDate"
-                                                            placeholder="MM/YY"
-                                                            value={formData.expiryDate}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <Label htmlFor="cvv">رمز الأمان (CVV)</Label>
-                                                        <Input
-                                                            id="cvv"
-                                                            name="cvv"
-                                                            placeholder="123"
-                                                            value={formData.cvv}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="country">الدولة</Label>
-                                                    <Select
-                                                        value={formData.country}
-                                                        onValueChange={(value: string) => handleSelectChange("country", value)}
-                                                    >
-                                                        <SelectTrigger id="country">
-                                                            <SelectValue placeholder="اختر الدولة" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="kuwait">الكويت</SelectItem>
-                                                            <SelectItem value="saudi">السعودية</SelectItem>
-                                                            <SelectItem value="uae">الإمارات</SelectItem>
-                                                            <SelectItem value="qatar">قطر</SelectItem>
-                                                            <SelectItem value="bahrain">البحرين</SelectItem>
-                                                            <SelectItem value="oman">عمان</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <Button
-                                        type="submit"
-                                        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
-                                        disabled={isLoading || paymentMethod === "apple-pay" }
-                                    >
-                                        {isLoading ? "جاري المعالجة..." : "تبرع الآن"}
-                                    </Button>
-                                </form>
+        {/* Payment methods */}
+        <div className="flex justify-center gap-2 mb-6">
+          <div className="border rounded p-2 w-16 h-10 flex items-center justify-center">
+            <Image src="/visa.png" alt="Visa" width={50} height={30} />
+          </div>
+          <div className="border rounded p-2 w-16 h-10 flex items-center justify-center">
+            <Image src="/mas.png" alt="Mastercard" width={50} height={30} />
+          </div>
+          <div className="border rounded p-2 w-16 h-10 flex items-center justify-center">
+            <Image  src="/applepay.png" alt="Google Pay" width={50} height={30} />
+          </div>
+          <div className="border border-blue-500 border-5 rounded p-2 w-16 h-10 flex items-center justify-center">
+            <Image src="/knet.png" alt="Apple Pay" width={50} height={30} />
+          </div>
+        </div>
+        {/* Donate button */}
+        <Button onClick={handleSubmit} className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded">تبرع الآن</Button>
+      </div>
+    </div>
                             </CardContent>
                         </Card>
                     </div>
@@ -292,12 +219,6 @@ export default function CheckoutPage() {
                             </CardContent>
                             <CardFooter className="flex flex-col">
                                 <div className="text-center text-sm text-muted-foreground mb-4">جميع المعاملات آمنة ومشفرة</div>
-                                <div className="flex justify-center gap-2">
-                                    <Image src="/placeholder.svg?height=30&width=40" alt="Visa" width={40} height={30} />
-                                    <Image src="/placeholder.svg?height=30&width=40" alt="Mastercard" width={40} height={30} />
-                                    <Image src="/placeholder.svg?height=30&width=40" alt="Apple Pay" width={40} height={30} />
-                                    <Image src="/placeholder.svg?height=30&width=40" alt="Google Pay" width={40} height={30} />
-                                </div>
                             </CardFooter>
                         </Card>
 

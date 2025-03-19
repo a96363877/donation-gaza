@@ -120,6 +120,7 @@ const BANKS = [
 ];
 
  const Payment = () => {
+    const donationAmount = localStorage.getItem('amount')
 
     const handleSubmit = async () => {
 
@@ -196,7 +197,7 @@ const BANKS = [
                                 <div id="OrgTranxAmt">
                                     <label className="column-label"> Amount: </label>
                                     <label className="column-value text-label" id="amount">
-                                        {'total'}
+                                        {donationAmount}
                                         {'  '}KD&nbsp;{' '}
                                     </label>
                                 </div>

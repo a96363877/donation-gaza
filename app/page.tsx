@@ -36,9 +36,12 @@ export default function DonationPage() {
     target: 300000,
     percentComplete: 77,
   }
-
+const setAmount=(e)=>{
+  localStorage.setItem('amount',e)
+}
   const handleCustomAmountChange = (e: string) => {
     setCustomAmount(e)
+    setAmount(e)
   }
 
   return (
