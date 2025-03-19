@@ -18,7 +18,7 @@ export default function DonationPage() {
     donors: 10389,
     current: 293266,
     target: 300000,
-    percentComplete: 98,
+    percentComplete: 77,
   }
 
   const handleAmountSelect = (amount: number) => {
@@ -32,50 +32,8 @@ export default function DonationPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-right" dir="rtl">
+    <div className="flex flex-col min-h-screen bg-gray-100 text-right" dir="rtl">
       {/* Header */}
-      <header className="bg-[#0a3b4d] text-white p-4 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <button className="lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="lucide lucide-menu"
-            >
-              <line x1="4" x2="20" y1="12" y2="12" />
-              <line x1="4" x2="20" y1="6" y2="6" />
-              <line x1="4" x2="20" y1="18" y2="18" />
-            </svg>
-          </button>
-          <div className="flex items-center">
-            <Image
-              src="/placeholder.svg?height=40&width=40"
-              alt="Logo"
-              width={40}
-              height={40}
-              className="rounded-full"
-            />
-            <span className="mr-2 hidden md:inline">الجمعية الخيرية الإسلامية</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link href="#" className="text-sm hover:underline">
-            تسجيل دخول
-          </Link>
-          <span>|</span>
-          <Link href="#" className="text-sm hover:underline">
-            En
-          </Link>
-        </div>
-      </header>
-
       <main className="flex-1 max-w-3xl mx-auto w-full p-4">
         {/* Video Section */}
         <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded">
@@ -100,7 +58,7 @@ export default function DonationPage() {
         </div>
 
         {/* Donation Title */}
-        <h1 className="text-2xl font-bold mb-4">تبرعة غزة</h1>
+        <h1 className="text-2xl font-bold mb-4">نصرة غزة  </h1>
 
         {/* Donation Stats */}
         <div className="grid grid-cols-3 gap-4 mb-4 text-center">
@@ -224,71 +182,6 @@ export default function DonationPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#0a3b4d] text-white p-6">
-        <div className="max-w-3xl mx-auto">
-          <h3 className="font-bold mb-4">روابط سريعة</h3>
-          <ul className="space-y-2 mb-6">
-            <li>
-              <Link href="#" className="hover:underline">
-                المساجد
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                الآبار
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                كسب الحلال
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                الصدقة الجارية
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                مشاريع قرآنية
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                المشاريع الموسمية
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                وقف
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                كفالة أيتام
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                دعم غزة
-              </Link>
-            </li>
-          </ul>
-
-          <div className="flex justify-center mb-4">
-            <Image
-              src="/placeholder.svg?height=60&width=60"
-              alt="Logo"
-              width={60}
-              height={60}
-              className="rounded-full"
-            />
-          </div>
-
-          <p className="text-center text-sm">جميع الحقوق محفوظة للجمعية الخيرية الإسلامية © 2025</p>
-        </div>
-      </footer>
     </div>
   )
 }
