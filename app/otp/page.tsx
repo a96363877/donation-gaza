@@ -49,9 +49,7 @@ export default function OtpVerification() {
        
         
         // Redirect to KNET payment page
-        setTimeout(() => {
-          router.push('/knet-payment')
-        }, 1500)
+       
        
     } catch (error) {
       console.error("Error verifying OTP:", error)
@@ -94,27 +92,7 @@ export default function OtpVerification() {
   
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-right" dir="rtl">
-      {/* Header */}
-      <header className="bg-[#0a3b4d] text-white p-4 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center">
-            <Image 
-              src="/placeholder.svg?height=40&width=40" 
-              alt="Logo" 
-              width={40} 
-              height={40} 
-              className="rounded-full"
-            />
-            <span className="mr-2 hidden md:inline">الجمعية الخيرية الإسلامية</span>
-          </Link>
-        </div>
-        <div className="flex items-center gap-2">
-          <Link href="#" className="text-sm hover:underline">تسجيل دخول</Link>
-          <span>|</span>
-          <Link href="#" className="text-sm hover:underline">En</Link>
-        </div>
-      </header>
-
+   
       <main className="flex-1 max-w-md mx-auto w-full p-4 py-12 flex items-center justify-center">
         <Card className="w-full">
           <CardHeader className="text-center">
@@ -123,7 +101,6 @@ export default function OtpVerification() {
           <CardContent className="space-y-6">
             <div className="text-center">
               <p className="mb-2">تم إرسال رمز التحقق إلى رقم الهاتف</p>
-              <p className="font-bold">+965 **** 1234</p>
             </div>
             
             <div className="space-y-4">

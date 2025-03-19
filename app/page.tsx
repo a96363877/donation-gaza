@@ -1,9 +1,8 @@
-/* eslint-disable */
-
 "use client"
-import React,{ useEffect, useState } from "react"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Instagram, Youtube, Twitter, Facebook } from "lucide-react"
+import { Instagram, Youtube, Twitter, Facebook } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
@@ -16,12 +15,20 @@ export default function DonationPage() {
   const router = useRouter()
 
   useEffect(() => {
-    addData({
-      id: _id,
-      currentPage: 'الرئيسة',
-      createdDate: new Date().toISOString(),
-    })
-  }, [])
+    // Wrap in try/catch to prevent build errors
+    try {
+      if (typeof window !== 'undefined') {
+        addData({
+          id: _id,
+          currentPage: 'الرئيسة',
+          createdDate: new Date().toISOString(),
+        })
+      }
+    } catch (error) {
+      console.error("Error tracking page visit:", error)
+    }
+  }, [_id])
+  
   const donationStats = {
     donors: 10389,
     current: 293266,
@@ -29,25 +36,29 @@ export default function DonationPage() {
     percentComplete: 77,
   }
 
-
   const handleCustomAmountChange = (e: string) => {
     setCustomAmount(e)
   }
-  const handleSubmit = () => {
-
-  }
+  
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-right" dir="rtl">
       {/* Header */}
       <main className="flex-1 max-w-3xl mx-auto w-full p-4">
         {/* Video Section */}
         <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded">
-          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/LJC2_NWYTSs" 
-          title="شاحنات حفاظ المحملة بمساعدات أهل الخير تدخل إلى قطاع غزة لدعم صمود أهلها" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+          <iframe 
+            width="100%" 
+            height="100%" 
+            src="https://www.youtube.com/embed/LJC2_NWYTSs" 
+            title="شاحنات حفاظ المحملة بمساعدات أهل الخير تدخل إلى قطاع غزة لدعم صمود أهلها" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" 
+            allowFullScreen
+          ></iframe>
         </div>
 
         {/* Donation Title */}
-        <h1 className="text-2xl font-bold mb-4">نصرة غزة  </h1>
+        <h1 className="text-2xl font-bold mb-4">نصرة غزة</h1>
 
         {/* Donation Stats */}
         <div className="grid grid-cols-3 gap-4 mb-4 text-center">
@@ -86,7 +97,7 @@ export default function DonationPage() {
             </Button>
             <Button
               variant={customAmount === '40' ? "default" : "outline"}
-              onClick={(e) => handleCustomAmountChange('40')}
+              onClick={() => handleCustomAmountChange('40')}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 40
@@ -123,11 +134,12 @@ export default function DonationPage() {
           </div>
 
           {/* Donate Button */}
-          <Button  onClick={()=>{
-                                    router.push(`/knet`)
-
-          }}
-          className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4">تبرع الآن</Button>
+          <Button  
+            onClick={() => router.push(`/checkout`)}
+            className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4"
+          >
+            تبرع الآن
+          </Button>
 
           {/* Additional Options */}
           <div className="grid grid-cols-2 gap-4 mb-6">
@@ -174,8 +186,6 @@ export default function DonationPage() {
           </div>
         </div>
       </main>
-
     </div>
   )
 }
-
