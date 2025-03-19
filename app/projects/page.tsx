@@ -2,7 +2,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 
 export default function ProjectsPage() {
   // Sample projects data
@@ -87,7 +86,6 @@ export default function ProjectsPage() {
                     <span className="font-bold text-orange-500">{project.percentComplete}%</span>
                   </div>
                   {/* Fixed Progress component usage */}
-                  <Progress value={Number(project.percentComplete)} max={100} className="h-2" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-center text-sm">

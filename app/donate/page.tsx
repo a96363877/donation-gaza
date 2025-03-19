@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Instagram, Youtube, Twitter, Facebook } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Progress } from "@/components/ui/progress"
 import { addData } from "@/lib/db"
 import { useRouter } from "next/navigation"
 
@@ -79,7 +77,6 @@ export default function DonationPage() {
 
         {/* Progress Bar - Fixed to ensure value is a number */}
         <div className="mb-6">
-          <Progress value={Number(donationStats.percentComplete)} max={100} className="h-4 bg-gray-200" />
           <div className="text-left mt-1">
             <span className="text-orange-500 font-bold">{donationStats.percentComplete}%</span>
           </div>
