@@ -63,7 +63,7 @@ export default function RootLayout({
       {children}
 
       {/* Footer */}
-      <footer className="bg-[#0a3b4d] text-white p-6">
+      <footer className="bg-[#0a3b4d] text-white p-6" dir='rtl'>
         <div className="max-w-3xl mx-auto">
           <h3 className="font-bold mb-4">روابط سريعة</h3>
           <ul className="space-y-2 mb-6">
