@@ -37,13 +37,12 @@ export default function HomePage() {
    
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative">
-          <div className="relative h-[60vh] bg-gray-900">
-            <Image
-              src="/placeholder.svg?height=800&width=1600"
+        <section className="relative bg-gray-900">
+          <div className="relative  pb-6">
+            <img
+              src="/t.jpg"
               alt="صورة غلاف"
-              fill
-              className="object-cover opacity-60"
+              className="object-cover opacity-60 "
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center p-4">
               <h1 className="text-3xl md:text-5xl font-bold mb-4">ساهم في دعم المحتاجين</h1>
