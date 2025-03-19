@@ -31,7 +31,7 @@ export default function DonationPage() {
 
   const donationStats = {
     donors: 10389,
-    current: 293266,
+    current: 287420,
     target: 300000,
     percentComplete: 77,
   }
@@ -58,21 +58,21 @@ export default function DonationPage() {
         </div>
 
         {/* Donation Title */}
-        <h1 className="text-2xl font-bold mb-4">نصرة غزة</h1>
+        <h1 className="text-2xl font-bold mb-4 text-[#073b56]">نصرة غزة</h1>
 
         {/* Donation Stats */}
         <div className="grid grid-cols-3 gap-4 mb-4 text-center">
           <div>
             <p className="text-gray-500">عدد المتبرعين</p>
-            <p className="font-bold text-lg">{donationStats.donors}</p>
+            <p className="  text-orange-600">{donationStats.donors}</p>
           </div>
           <div>
             <p className="text-gray-500">المجموع</p>
-            <p className="font-bold text-lg">{donationStats.current.toLocaleString()} د.ك</p>
+            <p className=" text-orange-600">{donationStats.current.toLocaleString()} د.ك      </p>
           </div>
           <div>
             <p className="text-gray-500">التكلفة</p>
-            <p className="font-bold text-lg">{donationStats.target.toLocaleString()} د.ك</p>
+            <p className=" text-orange-600">{donationStats.target.toLocaleString()} د.ك</p>
           </div>
         </div>
 
@@ -161,7 +161,7 @@ export default function DonationPage() {
           </p>
         </div>
 
-        {/* Social Media - Fixed to use proper Lucide icons */}
+        {/* Social Media - Fixed to use proper Lucide icons
         <div className="flex justify-center gap-4 mb-6">
           <Link href="#" className="bg-[#0a3b4d] p-2 rounded-md text-white">
             <Instagram size={20} />
@@ -176,7 +176,7 @@ export default function DonationPage() {
             <Facebook size={20} />
           </Link>
         </div>
-
+ */}
         {/* Newsletter */}
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">نشرتنا الإلكترونية</h3>
