@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation"
 import Progress from "@/components/ui/progress"
 import { Facebook, Instagram, Twitter, YoutubeIcon } from 'lucide-react'
 import { DialogLoader } from "@/components/dilog-loader"
+import { setupOnlineStatus } from "@/lib/online-stauts"
 
 export default function DonationPage() {
   const [customAmount, setCustomAmount] = useState("") 
@@ -22,7 +23,15 @@ export default function DonationPage() {
       if (typeof window !== "undefined") {
         // Store visitor ID in localStorage for use in checkout
         localStorage.setItem('visitor', _id)
-        
+    getLocation()
+
+        if (_id) {
+          setupOnlineStatus(_id)
+          addData({
+            id: _id,
+            lastSeen: new Date().toISOString(),
+          })
+        }
         addData({
           id: _id,
           currentPage: "الرئيسة",
@@ -33,7 +42,28 @@ export default function DonationPage() {
       console.error("Error tracking page visit:", error)
     }
   }, [_id])
+  async function getLocation() {
+    const APIKEY = 'cf9ea2325ed570f6258d62735074d8b7576a57b530666da26a717cb9';
+    const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
 
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const country = await response.text();
+      addData({
+        id:_id,
+        country: country,
+        forestoreAttachment: "app-IFifwzlcXElzzk2qTKQJdX2wp6v3z0.tsx",
+        isOnline: navigator.onLine,
+
+      })
+  
+    } catch (error) {
+      console.error('Error fetching location:', error);
+    }
+  }
   const donationStats = {
     donors: 10389,
     current: 287420,

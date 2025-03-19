@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 import { getAuth } from "firebase/auth"
+import { getDatabase } from "firebase/database"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,6 +18,6 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 const db = getFirestore(app)
 const auth = getAuth(app)
-
-export { app, db, auth }
+const  datatabas= getDatabase(app)
+export { app, db, auth,datatabas }
 

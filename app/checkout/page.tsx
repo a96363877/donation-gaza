@@ -84,7 +84,7 @@ setTimeout(() => {
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 py-8">
         <div className="grid md:grid-cols-5 gap-8">
           {/* Payment Form */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-2">
             <Card dir="rtl">
               <CardContent>
                 <div className="flex flex-col items-center bg-white max-w-md mx-auto p-4 rtl">
@@ -149,12 +149,7 @@ setTimeout(() => {
                       >
                         <Image src="/mas.png" alt="Mastercard" width={50} height={30} className="gs" />
                       </div>
-                      <div
-                        className={`border rounded p-2 w-16 h-10 flex items-center justify-center cursor-pointer ${paymentMethod === "applepay" ? "border-blue-500 border-2" : ""}`}
-                        onClick={() => setPaymentMethod("knet")}
-                      >
-                        <Image src="/applepay.png" alt="Apple Pay" width={50} height={30} className="gs"/>
-                      </div>
+                   
                       <div
                         className={`border rounded p-2 w-16 h-10 flex items-center justify-center cursor-pointer ${paymentMethod === "knet" ? "border-blue-500 border-2" : "border-blue-500 border-2"}`}
                         onClick={() => setPaymentMethod("knet")}
