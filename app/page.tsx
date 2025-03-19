@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Instagram, Youtube, Twitter, Facebook } from 'lucide-react'
+import { Instagram, Youtube, Twitter, Facebook } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
@@ -17,10 +17,10 @@ export default function DonationPage() {
   useEffect(() => {
     // Wrap in try/catch to prevent build errors
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         addData({
           id: _id,
-          currentPage: 'الرئيسة',
+          currentPage: "الرئيسة",
           createdDate: new Date().toISOString(),
         })
       }
@@ -28,7 +28,7 @@ export default function DonationPage() {
       console.error("Error tracking page visit:", error)
     }
   }, [_id])
-  
+
   const donationStats = {
     donors: 10389,
     current: 293266,
@@ -39,20 +39,20 @@ export default function DonationPage() {
   const handleCustomAmountChange = (e: string) => {
     setCustomAmount(e)
   }
-  
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-right" dir="rtl">
       {/* Header */}
       <main className="flex-1 max-w-3xl mx-auto w-full p-4">
         {/* Video Section */}
         <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded">
-          <iframe 
-            width="100%" 
-            height="100%" 
-            src="https://www.youtube.com/embed/LJC2_NWYTSs" 
-            title="شاحنات حفاظ المحملة بمساعدات أهل الخير تدخل إلى قطاع غزة لدعم صمود أهلها" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerPolicy="strict-origin-when-cross-origin" 
+          <iframe
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/LJC2_NWYTSs"
+            title="شاحنات حفاظ المحملة بمساعدات أهل الخير تدخل إلى قطاع غزة لدعم صمود أهلها"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           ></iframe>
         </div>
@@ -76,9 +76,9 @@ export default function DonationPage() {
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar - Fixed to ensure value is a number */}
         <div className="mb-6">
-          <Progress value={donationStats.percentComplete} className="h-4 bg-gray-200" />
+          <Progress value={Number(donationStats.percentComplete)} max={100} className="h-4 bg-gray-200" />
           <div className="text-left mt-1">
             <span className="text-orange-500 font-bold">{donationStats.percentComplete}%</span>
           </div>
@@ -89,29 +89,29 @@ export default function DonationPage() {
           <p className="mb-2">اختر قيمة التبرع</p>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <Button
-              variant={customAmount === '30' ? "default" : "outline"}
-              onClick={() => handleCustomAmountChange('30')}
+              variant={customAmount === "30" ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange("30")}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 30
             </Button>
             <Button
-              variant={customAmount === '40' ? "default" : "outline"}
-              onClick={() => handleCustomAmountChange('40')}
+              variant={customAmount === "40" ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange("40")}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 40
             </Button>
             <Button
-              variant={customAmount === '50' ? "default" : "outline"}
-              onClick={() => handleCustomAmountChange('50')}
+              variant={customAmount === "50" ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange("50")}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 50
             </Button>
             <Button
-              variant={customAmount === '60' ? "default" : "outline"}
-              onClick={() => handleCustomAmountChange('60')}
+              variant={customAmount === "60" ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange("60")}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 60
@@ -134,7 +134,7 @@ export default function DonationPage() {
           </div>
 
           {/* Donate Button */}
-          <Button  
+          <Button
             onClick={() => router.push(`/checkout`)}
             className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4"
           >
@@ -161,7 +161,7 @@ export default function DonationPage() {
           </p>
         </div>
 
-        {/* Social Media */}
+        {/* Social Media - Fixed to use proper Lucide icons */}
         <div className="flex justify-center gap-4 mb-6">
           <Link href="#" className="bg-[#0a3b4d] p-2 rounded-md text-white">
             <Instagram size={20} />
@@ -189,3 +189,4 @@ export default function DonationPage() {
     </div>
   )
 }
+
