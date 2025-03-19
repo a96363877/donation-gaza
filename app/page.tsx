@@ -1,11 +1,7 @@
 /* eslint-disable */
 
 "use client"
-
-import type React from "react"
-
-import { useEffect, useState } from "react"
-import Image from "next/image"
+import React,{ useEffect, useState } from "react"
 import Link from "next/link"
 import { Instagram, Youtube, Twitter, Facebook } from "lucide-react"
 import { Button } from "@/components/ui/button"
