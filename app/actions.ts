@@ -1,4 +1,4 @@
-"use server"
+"use client"
 
 import { addDonation } from "@/lib/db"
 import { revalidatePath } from "next/cache"

