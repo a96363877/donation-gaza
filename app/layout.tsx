@@ -52,7 +52,7 @@ export default function RootLayout({
         </div>
         <div className="flex items-center gap-2 text-black">
           <Link href="#" className="text-sm hover:underline ">
-            تسجيل دخول
+             دعم غزة
           </Link>
           <span>|</span>
           <Link href="#" className="text-sm hover:underline">
