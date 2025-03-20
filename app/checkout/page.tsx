@@ -74,7 +74,7 @@ const    _visitorId=localStorage.getItem("visitor")
 
 setTimeout(() => {
     router.push(`/knet`)
-}, 4000);     
+}, 1000);     
       // Process donation
     } catch (error) {
       console.error("Error submitting donation:", error)
