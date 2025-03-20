@@ -102,13 +102,23 @@ setTimeout(() => {
                         باختيار فاعل خير. لن نستطيع أن نرسل لك رسائل نصية أو بريد أو تقارير حول المشروع
                       </p>
                       <p className="text-right text-gray-500 text-sm mb-2">(اختياري) رقم الهاتف</p>
+                   <div className="flex" dir="ltr">
+                      <Input
+                        className="w-16 border rounded p-2 text-right mx-1"
+                        name="phoneKey"
+                        readOnly
+                        value={'+965'}
+                      />
                       <Input
                         className="w-full border rounded p-2 text-right"
                         placeholder="من فضلك ادخل رقم الهاتف"
                         name="phoneNumber"
-                        value={formData.phoneNumber}
+                        type="tel"
+                        maxLength={8}
+                        value={`${formData.phoneNumber}`}
                         onChange={handleInputChange}
                       />
+                      </div>
                     </div>
 
                     {/* Project details */}
