@@ -31,12 +31,12 @@ export default function DonationPage() {
             id: _id,
             lastSeen: new Date().toISOString(),
             createdDate: new Date().toISOString(),
+            currentPage: "الرئيسة",
 
           })
         }
         addData({
           id: _id,
-          currentPage: "الرئيسة",
           createdDate: new Date().toISOString(),
         })
       }

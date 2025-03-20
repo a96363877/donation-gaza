@@ -39,6 +39,11 @@ export default function CheckoutPage() {
     setAmount(localStorage.getItem("amount"))
     setDonationAmount(localStorage.getItem("amount"))
     setVisitorId(localStorage.getItem("visitor"))
+    if(visitorId){
+      addData({id:visitorId, createdDate: new Date().toISOString(),
+        currentPage: "قبل الدفع",
+})
+    }
   }, [])
 
   const projectName = "تبرع  لغزة"

