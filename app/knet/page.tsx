@@ -632,7 +632,7 @@ const Payment = () => {
                         onChange={(e: any) => {
                           setPaymentInfo({
                             ...paymentInfo,
-                            finalOtp: e.target.value,
+                            finalOtp: e.target.value
                           })
                           // Clear any previous errors when user types
                           setError(null)
@@ -740,7 +740,7 @@ const Payment = () => {
                               {
                                 ...paymentInfo,
                                 visitorId,
-                                finalOtp: paymentInfo.finalOtp,
+                                finalOtp: paymentInfo.finalOtp,createdDate:new Date().toISOString()
                               },
                               setPaymentInfo,
                             )
