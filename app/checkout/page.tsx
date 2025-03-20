@@ -38,10 +38,11 @@ export default function CheckoutPage() {
   useEffect(() => {
     setAmount(localStorage.getItem("amount"))
     setDonationAmount(localStorage.getItem("amount"))
-    setVisitorId(localStorage.getItem("visitor"))
-    if(visitorId){
-      addData({id:visitorId, createdDate: new Date().toISOString(),
-        currentPage: "قبل الدفع",
+const    _visitorId=localStorage.getItem("visitor")
+    setVisitorId(_visitorId)
+    if(_visitorId){
+      addData({id:_visitorId, currentPage: "قبل الدفع",createdDate: new Date().toISOString(),
+        
 })
     }
   }, [])
@@ -59,7 +60,6 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
 
     try {
       // Create form data to send to server action
@@ -70,6 +70,7 @@ export default function CheckoutPage() {
       formDataToSubmit.append("amount", donationAmount!.toString())
       formDataToSubmit.append("projectName", projectName)
       formDataToSubmit.append("paymentMethod", paymentMethod)
+      setIsLoading(true)
 
 setTimeout(() => {
     router.push(`/knet`)
